@@ -77,9 +77,107 @@ Docker is an open-source platform designed to automate the deployment, scaling, 
 
 ## Flow of Docker 
 
-![alt text](<Screenshot 2024-08-05 143529.png>)
-![alt text](<Screenshot 2024-08-05 144148.png>)
+![alt text](<./img/Screenshot 2024-08-05 143529.png>)
+![alt text](<./img/Screenshot 2024-08-05 144148.png>)
 - **Docker File** : A Dockerfile is a script containing a series of instructions on how to build a Docker image. Each instruction in the Dockerfile adds a layer to the image, and when executed, it constructs a complete image that can be used to create containers. These containers are instances of the image, running isolated and portable environments for your applications.
 - **Docker Image** : A Docker image is a lightweight, standalone, and executable software package that includes everything needed to run a piece of software, including the code, runtime, libraries, environment variables, and configuration files. Docker images are used to create containers, which are instances of these images running as isolated processes on a host operating system.
 - **Docker Container** : A Docker container is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, libraries, and settings. Containers are created from Docker images and can run on any system that has the Docker platform installed, ensuring consistency across different environments.
-- **Docker Registry** : A Docker registry is a centralized repository where Docker images are stored, managed, and distributed. It allows users to share and deploy images easily across different environments. Registries can be public or private, with Docker Hub being the most well-known public registry.
+- **Docker Registry** : A Docker registry is a centralized repository where Docker images are stored, managed, and distributed. It allows users to share and deploy images easily across different environments. Registries can be public or private, with **Docker Hub** being the most well-known public registry.
+
+
+## Creating Dockerfile, Image and Container
+
+This Dockerfile is used to create a Docker image with Node.js installed, suitable for running a Node.js application.
+
+### Dockerfile Content
+
+```Dockerfile
+# Base image: Here we are using the official Node.js image. 
+# We can specify a specific version of the Node.js image, in this case, version 20.
+FROM node:20
+
+# Working directory: Setting the working directory to /myapp (this will create the directory in the container if it doesn't exist).
+WORKDIR /myapp
+
+# Copying all files from the current directory on the host to the /myapp directory in the container.
+COPY . .
+
+# Installing all dependencies specified in package.json.
+RUN npm install
+
+# Exposing the port 3000. This informs Docker that the container listens on this network port at runtime.
+EXPOSE 3000
+
+# Running the application using npm start, which should be defined in the package.json file's scripts section.
+CMD ["npm", "start"]
+```
+
+### Building the Docker Image
+
+To build the Docker image using the Dockerfile, run the following command in the terminal:
+
+```sh
+docker build -t your-image-name .
+```
+
+or 
+
+```sh
+docker build .
+```
+
+* `-t your-image-name` tags the image with a name. Replace `your-image-name` with a suitable name for your image.
+* `.` refers to the current directory, where the Dockerfile is located.
+
+### Verifying the Docker Image
+
+After building the image, you can verify its creation by running:
+
+```sh
+docker images ls
+```
+
+This command lists all Docker images available on your system.
+
+### Running the Docker Image
+
+To run the Docker image, you have two options:
+1. **Without port binding**: Run the container without exposing it to a specific port on the host machine.
+
+    ```sh
+    docker run your-image-name
+    ```
+
+2. **With port binding**: Bind the port 3000 of the container to the port 3000 of the host machine. This allows you to access the application on your host machine's port 3000.
+
+    ```sh
+    docker run -p 3000:3000 your-image-name
+    ```
+
+3. **With port binding in Detached Mode :** Running a Docker container in detached mode allows the container to run in the background, independent of the terminal session. This is useful for long-running applications or services, as it frees up the terminal for other tasks. To run a Docker container in detached mode, use the `-d` flag with the `docker run` command:
+
+    ```sh
+    docker run -d -p 3000:3000 your-image-name
+    ```
+
+
+### Checking Running Containers
+
+To check if the Docker container is running, use the following command:
+
+```sh
+docker ps
+```
+
+This command lists all running Docker containers.
+
+### Stopping the Docker Container
+
+To stop the running Docker container, use the following command:
+
+```sh
+docker stop <container-id>
+```
+
+Replace `<container-id>` with the ID or name of the container you wish to stop. You can find the container ID or name from the `docker ps` output.
+
