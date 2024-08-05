@@ -35,9 +35,9 @@ Docker is an open-source platform designed to automate the deployment, scaling, 
 
 <div style="display: flex" align="center">
 
- ![alt text](./img/image-1.png) Single Container 
+ ![alt text](./img/image-1.png) <br>Single Container </br>
 
-![alt text](<./img/Screenshot 2024-08-02 124230.png>) Multiple containers for multiple apps
+![alt text](<./img/Screenshot 2024-08-02 124230.png>) <br>Multiple containers for multiple apps</br>
 
 </div>
 
@@ -65,3 +65,21 @@ Docker is an open-source platform designed to automate the deployment, scaling, 
 | **Use Cases**       | Microservices, CI/CD, Dev/Test    | Full OS, legacy apps, isolation|
 
 ---
+
+
+## Main Components of Docker
+
+- Docker File
+- Docker Image
+- Docker Container 
+- Docker Registry
+
+
+## Flow of Docker 
+
+![alt text](<Screenshot 2024-08-05 143529.png>)
+![alt text](<Screenshot 2024-08-05 144148.png>)
+- **Docker File** : A Dockerfile is a script containing a series of instructions on how to build a Docker image. Each instruction in the Dockerfile adds a layer to the image, and when executed, it constructs a complete image that can be used to create containers. These containers are instances of the image, running isolated and portable environments for your applications.
+- **Docker Image** : A Docker image is a lightweight, standalone, and executable software package that includes everything needed to run a piece of software, including the code, runtime, libraries, environment variables, and configuration files. Docker images are used to create containers, which are instances of these images running as isolated processes on a host operating system.
+- **Docker Container** : A Docker container is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, libraries, and settings. Containers are created from Docker images and can run on any system that has the Docker platform installed, ensuring consistency across different environments.
+- **Docker Registry** : A Docker registry is a centralized repository where Docker images are stored, managed, and distributed. It allows users to share and deploy images easily across different environments. Registries can be public or private, with Docker Hub being the most well-known public registry.
