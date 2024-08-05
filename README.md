@@ -90,7 +90,7 @@ Docker is an open-source platform designed to automate the deployment, scaling, 
 
 This Dockerfile is used to create a Docker image with Node.js installed, suitable for running a Node.js application.
 
-### Dockerfile Content
+###  🐳 Dockerfile Content
 
 ```Dockerfile
 # Base image: Here we are using the official Node.js image. 
@@ -113,7 +113,7 @@ EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
-### Building the Docker Image
+### 🐳 Building the Docker Image
 
 To build the Docker image using the Dockerfile, run the following command in the terminal:
 
@@ -130,7 +130,7 @@ docker build .
 * `-t your-image-name` tags the image with a name. Replace `your-image-name` with a suitable name for your image.
 * `.` refers to the current directory, where the Dockerfile is located.
 
-### Verifying the Docker Image
+### 🐳 Verifying the Docker Image
 
 After building the image, you can verify its creation by running:
 
@@ -140,7 +140,7 @@ docker images ls
 
 This command lists all Docker images available on your system.
 
-### Running the Docker Image
+### 🐳 Running the Docker Image
 
 To run the Docker image, you have two options:
 1. **Without port binding**: Run the container without exposing it to a specific port on the host machine.
@@ -162,7 +162,7 @@ To run the Docker image, you have two options:
     ```
 
 
-### Checking Running Containers
+### 🐳 Checking Running Containers
 
 To check if the Docker container is running, use the following command:
 
@@ -172,7 +172,17 @@ docker ps
 
 This command lists all running Docker containers.
 
-### Stopping the Docker Container
+### 🐳 Checking All containers (Running or not)
+
+To check all Docker containers, whether they are running or stopped, you can use the following command:
+
+```sh
+docker ps -a
+```
+
+This command lists all containers on your system, providing details such as container IDs, image names, commands used to start them, creation time, status, ports, and names.
+
+### 🐳 Stopping the Docker Container
 
 To stop the running Docker container, use the following command:
 
@@ -182,13 +192,60 @@ docker stop <container-id>
 
 Replace `<container-id>` with the ID or name of the container you wish to stop. You can find the container ID or name from the `docker ps` output.
 
+### 🐳 Removing Container
+To remove a Docker container, you need to know its container ID or name. Follow these steps:
+
+1. **List all containers** (both running and stopped) to find the container ID or name:
+
+    ```sh
+    docker ps -a
+    ```
+
+2. **Remove the container** using the `docker rm` command followed by the container ID or name. For example, to remove a container with the ID `abc123`:
+
+    ```sh
+    docker rm abc123
+    ```
+
+### 🐳 Removing Running Containers
+
+If the container is currently running, you need to stop it before removing it. You can do this in one command by adding the `-f` (force) flag, which stops and removes the container:
+
+```sh
+docker rm -f abc123
+```
+
+### 🐳 Removing All Containers
+
+To remove all containers, you can use the following command, which stops and removes all containers:
+
+```sh
+docker rm -f $(docker ps -aq)
+```
+
+* `docker ps -aq` lists all container IDs.
+* `docker rm -f` removes all containers, even if they are running.
+
+Use these commands with caution, especially the one that removes all containers, as this action cannot be undone.
+
+### 🐳 Auto Removing when Container is stopped
+To automatically remove a Docker container when it stops, you can use the `--rm` flag with the `docker run` command. This will ensure that the container is removed immediately after it stops, without needing any manual intervention.
+
+```sh
+docker run --rm -d -p 3000:3000 your-image-name
+```
+### 🐳 Custom name to container
+```sh
+docker run -d --rm --name "dockertutorial" -p 3007:3000 5feb38d50bc3
+```
+
 <br>
 
 ## 8. Running Multiple Containers of the Same Image
 
 You can run multiple instances of the same Docker image, each listening on a different port on the host machine. This allows you to scale your application or test different configurations simultaneously. Here’s how to do it:
 
-### Commands to Run Multiple Containers
+### 🐳 Commands to Run Multiple Containers
 
 ```sh
 docker run -d -p 3000:3000 5feb38d50bc3
@@ -196,7 +253,7 @@ docker run -d -p 3001:3000 5feb38d50bc3
 docker run -d -p 3002:3000 5feb38d50bc3
 ```
 
-### Explanation
+### 🐳 Explanation
 
 1. **First Container**: 
     ```sh
@@ -216,13 +273,13 @@ docker run -d -p 3002:3000 5feb38d50bc3
     ```
     Similar to the previous commands, this one runs the container in detached mode and maps port 3002 on the host to port 3000 in the container.
 
-### Benefits
+### 🐳 Benefits
 
 1. **Testing and Development**: Running multiple containers from the same image on different ports allows you to test different scenarios or configurations without interference.
 2. **Load Balancing and Scaling**: This setup is useful for load balancing and scaling applications. You can distribute traffic across multiple containers to handle higher loads.
 3. **Isolation**: Each container runs in isolation, so changes in one container won’t affect the others. This is useful for ensuring consistent behavior across different environments.
 
-### Verifying Running Containers
+### 🐳 Verifying Running Containers
 
 To verify that all containers are running, use the following command:
 
@@ -232,7 +289,7 @@ docker ps
 
 This will list all running Docker containers, including their port mappings.
 
-### Stopping the Containers
+### 🐳 Stopping the Containers
 
 To stop the running containers, use the `docker stop` command followed by the container IDs or names. For example:
 
@@ -242,5 +299,107 @@ docker stop <container-id-1> <container-id-2> <container-id-3>
 
 Replace `<container-id-1>`, `<container-id-2>`, and `<container-id-3>` with the actual container IDs from the `docker ps` output.
 
----
+<br>
 
+## 9. Managing Docker Images
+
+### 🐳 Assigning Tag/Name to Docker Image
+
+- `docker build`: This is the base command to build a Docker image.
+- `-t mydockercont:01`: This tags the image with the name `mydockercont` and the tag `01`. The tag is optional but useful for versioning.
+- `.`: This indicates the build context, which is the current directory in this case.
+    ```Sh
+    docker build -t mydockercont:01 .
+    ```
+
+### 🐳 Removing Docker Image
+
+-  `rmi` : *rm* stand for remove and additional *i* for Removing images
+    ```Sh
+    docker rmi mydockercont:01
+    ```
+
+<br>
+
+## 10. Pre defined Images on DockerHub
+
+Docker Hub is a repository of predefined Docker images that you can use to quickly set up various applications and services. One popular example is the Nginx web server.
+
+### Using Predefined Nginx Image
+
+1. **Pulling the Nginx Image**:
+
+    To pull the official Nginx image from Docker Hub, use the following command:
+
+    ```sh
+    docker pull nginx
+    ```
+
+    This downloads the latest Nginx image to your local machine. You can also specify a version or tag if needed, e.g., `nginx:1.21.3`.
+
+2. **Running the Nginx Container**:
+
+    To run the Nginx container in detached mode and map port 80 on the host to port 80 in the container, use the following command:
+
+    ```sh
+    docker run -d --name mynginx -p 8080:80 nginx
+    ```
+
+    - `-d`: Runs the container in detached mode (in the background).
+    - `--name mynginx`: Assigns the name `mynginx` to the container.
+    - `-p 8080:80`: Maps port 8080 on the host to port 80 in the container, making Nginx accessible via `http://localhost:8080`.
+    - `nginx`: Specifies the image to use.
+
+3. **Accessing the Nginx Web Server**:
+
+    After running the container, you can access the default Nginx welcome page by navigating to `http://localhost:8080` in your web browser.
+
+4. **Stopping and Removing the Nginx Container**:
+
+    To stop the running Nginx container, use the following command:
+
+    ```sh
+    docker stop mynginx
+    ```
+
+    To remove the stopped container, use:
+
+    ```sh
+    docker rm mynginx
+    ```
+
+<br>
+
+## Push a Docker image from your local machine to Docker Hub
+
+### 1. Create a Docker Hub Account
+
+If you don't already have a Docker Hub account, you need to create one at [Docker Hub](https://hub.docker.com/).
+
+### 2. Log In to Docker Hub
+
+Log in to your Docker Hub account from the command line:
+
+```sh
+docker login
+```
+
+You will be prompted to enter your Docker Hub username and password.
+
+### 3. Tag Your Local Image
+
+Docker images need to be tagged with your Docker Hub username and repository name before they can be pushed. Assume you have a local image called `mydockercont:01`. You need to tag it as follows:
+
+```sh
+docker tag mydockercont:01 yourusername/mydockercont:01
+```
+
+Replace `yourusername` with your Docker Hub username.
+
+### 4. Push the Image to Docker Hub
+
+Use the `docker push` command to push your tagged image to Docker Hub:
+
+```sh
+docker push yourusername/mydockercont:01
+```
