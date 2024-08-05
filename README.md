@@ -370,7 +370,7 @@ Docker Hub is a repository of predefined Docker images that you can use to quick
 
 <br>
 
-## Push a Docker image from your local machine to Docker Hub
+## 11. Push a Docker image from your local machine to Docker Hub
 
 ### 1. Create a Docker Hub Account
 
