@@ -644,7 +644,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGODB_URI=mongodb+srv://pbarthwal90:Pranav123@cluster0.tx71i7y.mongodb.net
+      - MONGODB_URI=mongodb+srv://pbarthwal90:<password>@cluster0.tx71i7y.mongodb.net
     depends_on:
       - mongo
 
