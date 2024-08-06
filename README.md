@@ -536,9 +536,152 @@ docker run -v /home/user/myfile.txt:/myapp/file.txt 5feb38d50bc3
 
 By using this syntax, you can easily share files between your host machine and Docker containers, enabling efficient development and testing workflows.
 
-
-
 ### 🐳 Managing Bind Mounts
 
 Bind mounts are managed by the Docker daemon but are tied to the host file system. Unlike volumes, bind mounts do not persist data outside of the container lifecycle. However, they are useful for scenarios where real-time access to host files is required.
 
+<br>
+
+## 13. Docker Compose
+
+Docker Compose is a tool that allows you to define and manage multi-container Docker applications. With Docker Compose, you can define the services that make up your app in a `docker-compose.yml` file and then run those services together with a single command.
+
+Here’s a step-by-step example of using Docker Compose with a MERN (MongoDB, Express, React, Node.js) stack:
+
+### Step 1: Set Up the Project Structure
+
+Let's assume you have the following project structure:
+
+```
+mern-app/
+  backend/
+    Dockerfile
+    server.js
+    package.json
+  frontend/
+    Dockerfile
+    src/
+    public/
+    package.json
+  docker-compose.yml
+```
+
+### Step 2: Create Dockerfiles for Backend and Frontend
+
+**Backend Dockerfile (`backend/Dockerfile`):**
+
+```dockerfile
+# Use the official Node.js image
+FROM node:14
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Bind to port 5000
+EXPOSE 5000
+
+# Run the app
+CMD ["node", "server.js"]
+```
+
+**Frontend Dockerfile (`frontend/Dockerfile`):**
+
+```dockerfile
+# Use the official Node.js image
+FROM node:14
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package*.json ./
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Build the app
+RUN npm run build
+
+# Install serve to serve the build
+RUN npm install -g serve
+
+# Expose port 3000
+EXPOSE 3000
+
+# Serve the build
+CMD ["serve", "-s", "build"]
+```
+
+### Step 3: Create a Docker Compose File
+
+**Docker Compose file (`docker-compose.yml`):**
+
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb+srv://pbarthwal90:Pranav123@cluster0.tx71i7y.mongodb.net
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+```
+
+### Step 4: Run Docker Compose
+
+From the root of your project directory (`mern-app`), run the following command to start the services defined in your `docker-compose.yml` file:
+
+```sh
+docker-compose up --build
+```
+
+### Explanation of `docker-compose.yml`
+
+- **version:** Specifies the version of the Docker Compose file format.
+- **services:** Defines the different services that make up your application.
+
+  - **frontend:** 
+    - **build:** Specifies the build context and Dockerfile for the frontend service.
+    - **ports:** Maps port 3000 on the host to port 3000 in the container.
+    - **depends_on:** Specifies that the frontend service depends on the backend service.
+  
+  - **backend:** 
+    - **build:** Specifies the build context and Dockerfile for the backend service.
+    - **ports:** Maps port 5000 on the host to port 5000 in the container.
+    - **environment:** Sets environment variables for the backend service.
+    - **depends_on:** Specifies that the backend service depends on the mongo service.
+
+  - **mongo:** 
+    - **image:** Uses the official MongoDB image.
+    - **ports:** Maps port 27017 on the host to port 27017 in the container.
+    - **environment:** Sets environment variables for MongoDB.
